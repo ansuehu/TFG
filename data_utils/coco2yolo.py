@@ -4,6 +4,7 @@ import shutil
 import cv2
 import argparse
 from tqdm import tqdm
+import yaml
 
 
 def parse_args():
@@ -61,13 +62,13 @@ def main():
 
     folders = imgs_list.keys()
 
-    for f in tqdm(folders, position=0, leave=True):
+    for f in folders:
 
         path = os.path.join(dest_path, f)
         data_path_f =  os.path.join(images_path, f)
         coco = COCO(anno_path + '/{}.json'.format(f))
 
-        for i, image in enumerate(tqdm(imgs_list[f], position=1, leave=False)):
+        for i, image in enumerate(tqdm(imgs_list[f])):
         
             shutil.copy(os.path.join(data_path_f, image), os.path.join(path, 'images' ,image))
 
@@ -90,6 +91,19 @@ def main():
             f.write(txt)
             f.close()
             # print(image)
+
+    data = dict(
+        train = './train/images',
+        val = './val/images',
+        test = './test/images',
+        nc = 1,
+        names = ['Tableroa']
+    )
+
+    with open(dest_path+'/data.yaml', 'w') as outfile:
+        yaml.dump(data, outfile, default_flow_style=False)
+
+
 
 
 if __name__ == "__main__":

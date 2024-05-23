@@ -20,174 +20,174 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-# Emandako puntua baño ezkerrerago dauden puntuak itzultzen ditu, ordenatuta
-def ezkerreko_gertuena(points, p):
-    min = (0,0)
-    min_dist = 1000000
-    min_index = None
-    for i, point in enumerate(points):
-        dist = distance.euclidean(p, point)
-        if point[0]<=p[0] and min_dist>dist:
-            min = point
-            min_index = i
-            min_dist = dist
-    if min_dist == 1000000:
-        return None
-    return min, min_index
+# # Emandako puntua baño ezkerrerago dauden puntuak itzultzen ditu, ordenatuta
+# def ezkerreko_gertuena(points, p):
+#     min = (0,0)
+#     min_dist = 1000000
+#     min_index = None
+#     for i, point in enumerate(points):
+#         dist = distance.euclidean(p, point)
+#         if point[0]<=p[0] and min_dist>dist:
+#             min = point
+#             min_index = i
+#             min_dist = dist
+#     if min_dist == 1000000:
+#         return None
+#     return min, min_index
 
-# Emandako puntua baño eskubirago dauden puntuak itzultzen ditu, ordenatuta
-def eskuineko_gertuena(points, p, img):
-    min = (img.shape[0]-1,0)
-    min_dist = 1000000
-    min_index = None, None
-    for i, point in enumerate(points):
-        # print(point)
-        dist = distance.euclidean(p, point)
-        if point[0]>=p[0] and min_dist>dist:
-            min = point
-            min_index = i
-            min_dist = dist
+# # Emandako puntua baño eskubirago dauden puntuak itzultzen ditu, ordenatuta
+# def eskuineko_gertuena(points, p, img):
+#     min = (img.shape[0]-1,0)
+#     min_dist = 1000000
+#     min_index = None, None
+#     for i, point in enumerate(points):
+#         # print(point)
+#         dist = distance.euclidean(p, point)
+#         if point[0]>=p[0] and min_dist>dist:
+#             min = point
+#             min_index = i
+#             min_dist = dist
 
-    if min_dist == 1000000:
-        return None, None
-    return min, min_index
+#     if min_dist == 1000000:
+#         return None, None
+#     return min, min_index
 
-# Emandako 2D-ko lista, erlojuaren zentzuan ordenatzen du
-def ordenatu_lista(seg, img):
+# # Emandako 2D-ko lista, erlojuaren zentzuan ordenatzen du
+# def ordenatu_lista(seg, img):
 
-    seg_ordenatuta = []
-    s = (img.shape[0]-1, len(img[0])-1)
-    ezker = ezkerreko_gertuena(seg, s)
-    if ezker == None:
-        i = None 
-    else:
-        s, i = ezker
+#     seg_ordenatuta = []
+#     s = (img.shape[0]-1, len(img[0])-1)
+#     ezker = ezkerreko_gertuena(seg, s)
+#     if ezker == None:
+#         i = None 
+#     else:
+#         s, i = ezker
 
-    while i != None:
-        seg_ordenatuta.append(seg.pop(i))
+#     while i != None:
+#         seg_ordenatuta.append(seg.pop(i))
 
-        ezker = ezkerreko_gertuena(seg, s)
+#         ezker = ezkerreko_gertuena(seg, s)
 
-        if ezker == None:
-            i = None 
-        else:
-            s, i = ezker
+#         if ezker == None:
+#             i = None 
+#         else:
+#             s, i = ezker
 
-    s, i = eskuineko_gertuena(seg, s, img)
+#     s, i = eskuineko_gertuena(seg, s, img)
 
-    while i != None:
-        seg_ordenatuta.append(seg.pop(i))
-        eskuin = eskuineko_gertuena(seg, s, img)
-        if eskuin == None:
-            i = None 
-        else:
-            s, i = eskuin
+#     while i != None:
+#         seg_ordenatuta.append(seg.pop(i))
+#         eskuin = eskuineko_gertuena(seg, s, img)
+#         if eskuin == None:
+#             i = None 
+#         else:
+#             s, i = eskuin
     
-    return seg_ordenatuta
+#     return seg_ordenatuta
 
-# Ordenatutako lista bat pasatuta, beharrezkoak diren puntuak bakarrik gordetzen ditu 
-def kendu_beharrezkoak_ez_direnak(seg_ordenatuta):
+# # Ordenatutako lista bat pasatuta, beharrezkoak diren puntuak bakarrik gordetzen ditu 
+# def kendu_beharrezkoak_ez_direnak(seg_ordenatuta):
 
-    lista_garbia = []
-    x = None
+#     lista_garbia = []
+#     x = None
 
-    for i in range(len(seg_ordenatuta)):
-        a = i-1
-        o = i+1
-        if i==0:
-            a = len(seg_ordenatuta)-1
-        if i==len(seg_ordenatuta)-1:
-            o = 0
+#     for i in range(len(seg_ordenatuta)):
+#         a = i-1
+#         o = i+1
+#         if i==0:
+#             a = len(seg_ordenatuta)-1
+#         if i==len(seg_ordenatuta)-1:
+#             o = 0
 
-        if abs(seg_ordenatuta[a][0]-seg_ordenatuta[o][0])<3 and ((seg_ordenatuta[i][1]<seg_ordenatuta[a][1] and seg_ordenatuta[i][1]>seg_ordenatuta[o][1]) or (seg_ordenatuta[i][1]>seg_ordenatuta[a][1] and seg_ordenatuta[i][1]<seg_ordenatuta[o][1])):
-            if x == False:
-                lista_garbia.append(seg_ordenatuta[i-1])
-            x = True
+#         if abs(seg_ordenatuta[a][0]-seg_ordenatuta[o][0])<3 and ((seg_ordenatuta[i][1]<seg_ordenatuta[a][1] and seg_ordenatuta[i][1]>seg_ordenatuta[o][1]) or (seg_ordenatuta[i][1]>seg_ordenatuta[a][1] and seg_ordenatuta[i][1]<seg_ordenatuta[o][1])):
+#             if x == False:
+#                 lista_garbia.append(seg_ordenatuta[i-1])
+#             x = True
 
-            continue
-        if abs(seg_ordenatuta[a][1]-seg_ordenatuta[o][1])<3 and ((seg_ordenatuta[i][0]<seg_ordenatuta[a][0] and seg_ordenatuta[i][0]>seg_ordenatuta[o][0]) or (seg_ordenatuta[i][0]>seg_ordenatuta[a][0] and seg_ordenatuta[i][0]<seg_ordenatuta[o][0])):
-            if x == True:
-                lista_garbia.append(seg_ordenatuta[i-1])
-            x = False
+#             continue
+#         if abs(seg_ordenatuta[a][1]-seg_ordenatuta[o][1])<3 and ((seg_ordenatuta[i][0]<seg_ordenatuta[a][0] and seg_ordenatuta[i][0]>seg_ordenatuta[o][0]) or (seg_ordenatuta[i][0]>seg_ordenatuta[a][0] and seg_ordenatuta[i][0]<seg_ordenatuta[o][0])):
+#             if x == True:
+#                 lista_garbia.append(seg_ordenatuta[i-1])
+#             x = False
             
-            continue
-        lista_garbia.append(seg_ordenatuta[i])
-    return lista_garbia
+#             continue
+#         lista_garbia.append(seg_ordenatuta[i])
+#     return lista_garbia
 
-#Maskara bat sartuta, bere ertzen koordenatuak itzultzen ditu. (Txurro bat da)
-def get_seg(img):
-    xhasi = []
-    xbukatu = []
-    t = 0 #Errenkadan maskara erregistratu den edo ez, t=0 ez, t=1 bai eta gorde da, t=2 bai baina ez da gorde
-    aurrekoah = -1 #Hasierako ertz bat bilatutakoan, zutabearen indizea gordetzen da, zutabe berean duten bilatzen diren ertzak ez gordetzeko
-    aurrekoab = -1 #Bukaerako ertz bat bilatutakoan, zutabearen indizea gordetzen da, zutabe berean duten bilatzen diren ertzak ez gordetzeko
-    for i, m in enumerate(img): #i.errenkada eta m pixel zerrenda
-        for j, g in enumerate(m): #j.zutabea eta g pixel zerrenda
-            if g[0]>200 and t==0: #Txuria bada eta ez bada maskara erregistratu errenkadan
-                if j != aurrekoah and (len(m)-1)!=j: #Ez bada aurreko zutabe bera
-                    xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
-                    aurrekoah = j #Eguneratu zutabea
-                    t = 1 #Erregistratu maskara
-                    # continue
-                elif (img.shape[0]-1)==i: #Argazkiko azken errenkada bada
-                    xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
-                    t = 1 #Erregistratu maskara
-                    # continue
-                elif (len(m)-1)==j and img[i+1][j][0]<200: #Azken zutabea bada eta behekoa beltza bada
-                    xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
-                    t = 0
-                    # continue
-                elif (img[i+1][j][0]<200 and img[i+1][j+1][0]<200): #Maskararen azken errenkada bada (ezker beheko ertza, lerro zuzenetan)
-                    xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
-                    t = 1 #Erregistratu maskara
-                    # continue
-                else: #Maskararen ezkerreko ertz bat bada, baina dagoeneko zutabea gorde bada
-                    t = 2 #Erregistratu maskara, baina ez dela gorde
-                    # continue
+# #Maskara bat sartuta, bere ertzen koordenatuak itzultzen ditu. (Txurro bat da)
+# def get_seg(img):
+#     xhasi = []
+#     xbukatu = []
+#     t = 0 #Errenkadan maskara erregistratu den edo ez, t=0 ez, t=1 bai eta gorde da, t=2 bai baina ez da gorde
+#     aurrekoah = -1 #Hasierako ertz bat bilatutakoan, zutabearen indizea gordetzen da, zutabe berean duten bilatzen diren ertzak ez gordetzeko
+#     aurrekoab = -1 #Bukaerako ertz bat bilatutakoan, zutabearen indizea gordetzen da, zutabe berean duten bilatzen diren ertzak ez gordetzeko
+#     for i, m in enumerate(img): #i.errenkada eta m pixel zerrenda
+#         for j, g in enumerate(m): #j.zutabea eta g pixel zerrenda
+#             if g[0]>200 and t==0: #Txuria bada eta ez bada maskara erregistratu errenkadan
+#                 if j != aurrekoah and (len(m)-1)!=j: #Ez bada aurreko zutabe bera
+#                     xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
+#                     aurrekoah = j #Eguneratu zutabea
+#                     t = 1 #Erregistratu maskara
+#                     # continue
+#                 elif (img.shape[0]-1)==i: #Argazkiko azken errenkada bada
+#                     xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
+#                     t = 1 #Erregistratu maskara
+#                     # continue
+#                 elif (len(m)-1)==j and img[i+1][j][0]<200: #Azken zutabea bada eta behekoa beltza bada
+#                     xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
+#                     t = 0
+#                     # continue
+#                 elif (img[i+1][j][0]<200 and img[i+1][j+1][0]<200): #Maskararen azken errenkada bada (ezker beheko ertza, lerro zuzenetan)
+#                     xhasi.append((j, i)) #Gorde maskara hasi den pixelen koordenatua
+#                     t = 1 #Erregistratu maskara
+#                     # continue
+#                 else: #Maskararen ezkerreko ertz bat bada, baina dagoeneko zutabea gorde bada
+#                     t = 2 #Erregistratu maskara, baina ez dela gorde
+#                     # continue
 
-            if (img.shape[0]-1)==i: #Argazkiko azken errenkada bada
-                if g[0]>200 and (len(m)-1)==j: #Txuria bada eta azken zutabea bada
-                    xbukatu.append((j, i)) #Gorde maskara bukatu den pixelen koordenatua
-                    t = 0
-                    continue
-                elif g[0]<200 and (t==1 or t==2): #Beltza bada eta maskara erregistratu abda
-                    xbukatu.append((j-1, i)) #Gorde maskara bukatu den pixelen koordenatua (aurreko zutabea)
-                    t = 0 #Maskara bukatu dela
-                    continue
+#             if (img.shape[0]-1)==i: #Argazkiko azken errenkada bada
+#                 if g[0]>200 and (len(m)-1)==j: #Txuria bada eta azken zutabea bada
+#                     xbukatu.append((j, i)) #Gorde maskara bukatu den pixelen koordenatua
+#                     t = 0
+#                     continue
+#                 elif g[0]<200 and (t==1 or t==2): #Beltza bada eta maskara erregistratu abda
+#                     xbukatu.append((j-1, i)) #Gorde maskara bukatu den pixelen koordenatua (aurreko zutabea)
+#                     t = 0 #Maskara bukatu dela
+#                     continue
 
-            elif ((t==1 or t==2)): #Tableroa erregistratu bada
-                if g[0]<200: #Beltza bada
-                    if j-1 != aurrekoab: #Ez bada aurreko zutabe bera
-                        xbukatu.append((j-1, i)) #Gorde maskara bukatu den pixelen koordenatua (aurreko zutabea)
-                        t = 0 #Maskara bukatu dela
-                        aurrekoab = j-1 #Eguneratu zutabea (aurreko zutabea)
-                        continue
-                    else: #Aurreko zutabe bera bada
-                        t = 0 #Maskara bukatu dela baina ez dela gorde
-                        continue
+#             elif ((t==1 or t==2)): #Tableroa erregistratu bada
+#                 if g[0]<200: #Beltza bada
+#                     if j-1 != aurrekoab: #Ez bada aurreko zutabe bera
+#                         xbukatu.append((j-1, i)) #Gorde maskara bukatu den pixelen koordenatua (aurreko zutabea)
+#                         t = 0 #Maskara bukatu dela
+#                         aurrekoab = j-1 #Eguneratu zutabea (aurreko zutabea)
+#                         continue
+#                     else: #Aurreko zutabe bera bada
+#                         t = 0 #Maskara bukatu dela baina ez dela gorde
+#                         continue
 
-                elif img[i+1][j][0]<200 and img[i+1][j-1][0]<200 and j == aurrekoab: #Maskararen azken errenkada bada eta aurreko zutabe bera bada (eskuin beheko ertza, lerro zuzenetan)
-                    xbukatu.append((j, i)) #Gorde maskara bukatu den pixelen koordenatua
-                    t = 0 #Maskara bukatu dela
-                    continue
+#                 elif img[i+1][j][0]<200 and img[i+1][j-1][0]<200 and j == aurrekoab: #Maskararen azken errenkada bada eta aurreko zutabe bera bada (eskuin beheko ertza, lerro zuzenetan)
+#                     xbukatu.append((j, i)) #Gorde maskara bukatu den pixelen koordenatua
+#                     t = 0 #Maskara bukatu dela
+#                     continue
 
-            if g[0]>200 and (len(m)-1)==j: #Txuria bada, eta azken zutabean bada
-                t = 0 #Maskara bukatu dela
-                if j != aurrekoab: #Ez bada aurreko zutabe bera
-                    xbukatu.append((j, i)) #Gorde maskara bukatu den pixelen koordenatua
-                    aurrekoab = j #Eguneratu zutabea
+#             if g[0]>200 and (len(m)-1)==j: #Txuria bada, eta azken zutabean bada
+#                 t = 0 #Maskara bukatu dela
+#                 if j != aurrekoab: #Ez bada aurreko zutabe bera
+#                     xbukatu.append((j, i)) #Gorde maskara bukatu den pixelen koordenatua
+#                     aurrekoab = j #Eguneratu zutabea
 
-    seg = (xhasi + list(set(xbukatu) - set(xhasi))) #Gehitu bi listak
+#     seg = (xhasi + list(set(xbukatu) - set(xhasi))) #Gehitu bi listak
 
-    seg_ordenatuta = ordenatu_lista(seg, img) #Ordenatu
+#     seg_ordenatuta = ordenatu_lista(seg, img) #Ordenatu
 
-    lista_garbia = kendu_beharrezkoak_ez_direnak(seg_ordenatuta) #Kendu behar ez diren puntuak
+#     lista_garbia = kendu_beharrezkoak_ez_direnak(seg_ordenatuta) #Kendu behar ez diren puntuak
 
-    seg_ordenatuta = ordenatu_lista(lista_garbia, img) #Ordenatu
+#     seg_ordenatuta = ordenatu_lista(lista_garbia, img) #Ordenatu
 
-    lista_garbia = kendu_beharrezkoak_ez_direnak(seg_ordenatuta) #Kendu behar ez diren puntuak
+#     lista_garbia = kendu_beharrezkoak_ez_direnak(seg_ordenatuta) #Kendu behar ez diren puntuak
 
-    return np.array(lista_garbia).flatten().tolist()
+#     return np.array(lista_garbia).flatten().tolist()
     
 def biggestContour(mask):
     contours,_ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
