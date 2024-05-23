@@ -1,0 +1,2 @@
+# TFG
+Tableroak Segmentatzeko Proiektua
